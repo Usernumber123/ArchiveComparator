@@ -13,9 +13,7 @@ public class Files {
         return status;
     }
 
-    public void print() {
-        System.out.println(name+" "+size+" "+ status.toString());
-    }
+
     public String getName() {
         return name;
     }
