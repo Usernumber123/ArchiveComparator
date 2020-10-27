@@ -5,18 +5,12 @@ public class ArchiveComparator {
     private Archive newArc;
     private Archive oldArc;
 
-    public Archive getNewArc() {
-        return newArc;
-    }
-
-    public Archive getOldArc() {
-        return oldArc;
-    }
 
     ArchiveComparator(Archive oldArc, Archive newArc) {
         this.oldArc = oldArc;
         this.newArc = newArc;
     }
+
     public void compare() {
         this.findDelFiles();
         this.findNewFiles();
@@ -26,14 +20,14 @@ public class ArchiveComparator {
 
     private void findDelFiles() {
         for (int i = 0; i < oldArc.getSize(); i++) {
-            boolean flag = true;
+            boolean check = true;
             for (int j = 0; j < newArc.getSize(); j++) {
                 if (Objects.equals(newArc.getFiles().get(j).getName(), oldArc.getFiles().get(i).getName())) {
-                    flag = false;
+                    check = false;
                     break;
                 }
             }
-            if (flag) {
+            if (check) {
                 oldArc.getFiles().get(i).setStatus(Status.DELETED);
             }
         }
@@ -42,14 +36,14 @@ public class ArchiveComparator {
 
     private void findNewFiles() {
         for (int i = 0; i < newArc.getSize(); i++) {
-            boolean flag = true;
+            boolean check = true;
             for (int j = 0; j < oldArc.getSize(); j++) {
                 if (Objects.equals(newArc.getFiles().get(i).getName(), oldArc.getFiles().get(j).getName())) {
-                    flag = false;
+                    check = false;
                     break;
                 }
             }
-            if (flag) {
+            if (check) {
                 newArc.getFiles().get(i).setStatus(Status.NEW);
             }
         }
@@ -81,26 +75,27 @@ public class ArchiveComparator {
             }
         }
     }
+
     public HashMap<Status, String> getHashMap() {
-        HashMap<Status, String> map = new HashMap<>();
+        HashMap<Status, String> hashMap = new HashMap<>();
         for (Files file : oldArc.getFiles()) {
             if (file.getStatus() == Status.RENAMED) {
                 for (Files file1 : newArc.getFiles()) {
                     if (file.getSize() == file1.getSize()) {
-                        map.put(file.getStatus(), file.getName() + '/' + file1.getName());
+                        hashMap.put(file.getStatus(), file.getName() + '/' + file1.getName());
                         break;
                     }
                 }
             } else {
-                map.put(file.getStatus(), file.getName());
+                hashMap.put(file.getStatus(), file.getName());
             }
         }
         for (Files file : newArc.getFiles()) {
             if (Objects.equals(file.getStatus(), Status.NEW)) {
-                map.put(file.getStatus(), file.getName());
+                hashMap.put(file.getStatus(), file.getName());
             }
         }
-        return map;
+        return hashMap;
     }
 
 }

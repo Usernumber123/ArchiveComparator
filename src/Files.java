@@ -1,7 +1,7 @@
 public class Files {
     private String name;
     private long size;
-     private Status status;
+    private Status status;
 
     public Files(String name, long size) {
         this.name = name;
